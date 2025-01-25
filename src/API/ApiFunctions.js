@@ -1,37 +1,59 @@
-const backendroute="https://hackathon-backend-green.vercel.app/"
-const loginRoute = backendroute+'auth/login'
-const signupRoute = backendroute+'auth/signup'
+// API Routes
+const loginRoute = "https://hackathon-backend-green.vercel.app/auth/login";
+const signupRoute = "https://hackathon-backend-green.vercel.app/auth/signup";
 
+/**
+ * Sign in with email and password
+ * @param {string} email - The email address of the user.
+ * @param {string} password - The password of the user.
+ * @returns {Promise<object>} - The response data from the API.
+ * @throws {Error} - If the API call fails or returns an error.
+ */
 const signInWithEmailAndPassword = async (email, password) => {
-    const response = await fetch(loginRoute, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-    });
+    try {
+        const response = await fetch(loginRoute, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+        });
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Failed to log in. Please try again.");
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error during sign-in:", error.message);
+        throw error;
     }
-
-    return response.json();
 };
 
+/**
+ * Register a new user with email and password
+ * @param {string} email - The email address of the user.
+ * @param {string} password - The password of the user.
+ * @returns {Promise<object>} - The response data from the API.
+ * @throws {Error} - If the API call fails or returns an error.
+ */
 const RegisterWithEmailAndPassword = async (email, password) => {
+    try {
+        const response = await fetch(signupRoute, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+        });
 
-    const response = await fetch(signupRoute, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-    });
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Failed to register. Please try again.");
+        }
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
+        return await response.json();
+    } catch (error) {
+        console.error("Error during registration:", error.message);
+        throw error;
     }
-
-    return response.json();
 };
 
-
-export { signInWithEmailAndPassword,RegisterWithEmailAndPassword }
+export { signInWithEmailAndPassword, RegisterWithEmailAndPassword };
