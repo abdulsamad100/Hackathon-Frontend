@@ -1,5 +1,6 @@
-const loginRoute = 'http://localhost:5000/auth/login'
-const signupRoute = 'http://localhost:5000/auth/signup'
+const backendroute="https://hackathon-backend-green.vercel.app/"
+const loginRoute = backendroute+'auth/login'
+const signupRoute = backendroute+'auth/signup'
 
 const signInWithEmailAndPassword = async (email, password) => {
     const response = await fetch(loginRoute, {
