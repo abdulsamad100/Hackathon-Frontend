@@ -20,7 +20,6 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
 
-
   const textFieldStyles = {
     containerBg: '#f4f9ff', // Light blue/white background
     textFieldBg: '#ffffff', // Pure white for input fields

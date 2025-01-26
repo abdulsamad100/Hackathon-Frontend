@@ -14,6 +14,7 @@ import {
     InputLabel,
     FormControl,
     Modal,
+    CircularProgress,
 } from "@mui/material";
 import { RegisterWithDetails } from "../API/ApiFunctions";
 
@@ -96,30 +97,25 @@ const LandingPage = () => {
     };
 
     const handleProceed = () => {
-        // Check if name is provided
         if (!userName.trim()) {
             setModalError("Name is required.");
             return;
         }
-    
-        // Check if email is valid
+
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(userEmail)) {
             setModalError("Please enter a valid email address.");
             return;
         }
-    
-        // Check if CNIC is exactly 13 digits
+
         if (!userCnic || userCnic.length !== 13 || !/^\d+$/.test(userCnic)) {
             setModalError("CNIC must be exactly 13 numeric characters.");
             return;
         }
-    
-        // If all validations pass, proceed
+
         alert(`Name: ${userName}, Email: ${userEmail}, CNIC: ${userCnic}`);
         handleModalClose();
     };
-    
 
     return (
         <Box sx={{ bgcolor: "background.default", minHeight: "100vh", py: 6 }}>
@@ -359,7 +355,7 @@ const LandingPage = () => {
                             <Button
                                 variant="contained"
                                 color="primary"
-                                onClick={()=>RegisterWithDetails(userCnic,userName,userEmail)}
+                                onClick={() => RegisterWithDetails(userCnic, userName, userEmail)}
                                 sx={{ px: 4, py: 1.5, mr: 2 }}
                             >
                                 Submit

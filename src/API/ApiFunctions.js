@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 // API Routes
 const loginRoute = "https://hackathon-backend-green.vercel.app/auth/login";
 const signupRoute = "https://hackathon-backend-green.vercel.app/auth/signup";
-const registerRoute = "http://localhost:5000/auth/register";
+const registerRoute = "https://hackathon-backend-green.vercel.app/auth/register";
 
 /**
  * Sign in with email and password
@@ -73,7 +73,7 @@ const RegisterWithDetails = async (cnic, name, email) => {
         }
 
         const resp= await response.json();
-        
+
         toast.success(resp,loader)
     } catch (error) {
         console.error("Error during registration:", error.message);
