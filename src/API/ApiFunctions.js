@@ -1,6 +1,9 @@
+import toast from "react-hot-toast";
+
 // API Routes
 const loginRoute = "https://hackathon-backend-green.vercel.app/auth/login";
 const signupRoute = "https://hackathon-backend-green.vercel.app/auth/signup";
+const registerRoute = "http://localhost:5000/auth/register";
 
 /**
  * Sign in with email and password
@@ -55,5 +58,27 @@ const RegisterWithEmailAndPassword = async (email, password) => {
         throw error;
     }
 };
+const RegisterWithDetails = async (cnic, name, email) => {
+    try {
+        const loader=toast.loading("Registering")
+        const response = await fetch(registerRoute, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ cnic, name, email }),
+        });
 
-export { signInWithEmailAndPassword, RegisterWithEmailAndPassword };
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Failed to register. Please try again.");
+        }
+
+        const resp= await response.json();
+        
+        toast.success(resp,loader)
+    } catch (error) {
+        console.error("Error during registration:", error.message);
+        throw error;
+    }
+};
+
+export { signInWithEmailAndPassword, RegisterWithEmailAndPassword, RegisterWithDetails };

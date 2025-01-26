@@ -1,9 +1,16 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Container, TextField, Button, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Divider,
+} from '@mui/material';
 import toast, { Toaster } from 'react-hot-toast';
 import { motion } from 'framer-motion';
 import { signInWithEmailAndPassword } from '../API/ApiFunctions';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -11,13 +18,18 @@ const LoginForm = () => {
     password: '',
   });
 
+  const navigate = useNavigate();
+
+
   const textFieldStyles = {
-    containerBg: '#333',
-    textFieldBg: '#444',
-    textColor: '#fff',
-    labelColor: '#aaa',
-    buttonBg: '#FFD700',
-    buttonTextColor: '#000',
+    containerBg: '#f4f9ff', // Light blue/white background
+    textFieldBg: '#ffffff', // Pure white for input fields
+    textColor: '#003366', // Dark blue text
+    labelColor: '#00509e', // Medium blue for labels
+    buttonBg: '#00509e', // Primary blue for buttons
+    buttonTextColor: '#ffffff', // White text on buttons
+    hoverBg: '#003366', // Darker blue for hover state
+    linkColor: '#00509e', // Blue for links
   };
 
   const handleChange = (e) => {
@@ -33,9 +45,16 @@ const LoginForm = () => {
     const loadingToast = toast.loading('Signing in...');
 
     try {
-      const response = await signInWithEmailAndPassword(formData.email, formData.password);
-      toast.success('Signed in successfully!', { id: loadingToast })
+      const response = await signInWithEmailAndPassword(
+        formData.email,
+        formData.password
+      );
+      toast.success('Signed in successfully!', { id: loadingToast });
       console.log(response);
+      if (response?.data?.token) {
+        localStorage.setItem('token', response.data.token);
+        navigate('/dashboard');
+      }
     } catch (error) {
       toast.dismiss(loadingToast);
       if (error.message.includes('auth/wrong-password')) {
@@ -54,36 +73,38 @@ const LoginForm = () => {
     <>
       <Toaster />
       <Container
+        maxWidth="xs"
         sx={{
           backgroundColor: textFieldStyles.containerBg,
           borderRadius: 4,
           boxShadow: 5,
-          minWidth: 260,
-          maxWidth: 1000,
-          width: '300px',
-          padding: 3,
+          p: 4,
           textAlign: 'center',
-          height: '350px',
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
           color: textFieldStyles.textColor,
+          mt: 12,
         }}
       >
-
         <Typography
-          variant="h5"
+          variant="h4"
+          fontWeight="bold"
           gutterBottom
-          sx={{ fontWeight: 'bold', color: '#FFD700' }}
+          sx={{ color: textFieldStyles.textColor }}
         >
-          Login
+          Welcome Back
         </Typography>
+        <Typography
+          variant="body2"
+          sx={{ mb: 3, color: textFieldStyles.labelColor }}
+        >
+          Login to your account
+        </Typography>
+        <Divider sx={{ mb: 3, borderColor: '#e0e0e0' }} />
+
         <form onSubmit={handleSubmit}>
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
           >
             <TextField
               fullWidth
@@ -95,7 +116,6 @@ const LoginForm = () => {
               onChange={handleChange}
               margin="normal"
               variant="outlined"
-              autoComplete="current-password"
               sx={{
                 backgroundColor: textFieldStyles.textFieldBg,
                 borderRadius: '8px',
@@ -110,9 +130,9 @@ const LoginForm = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
           >
             <TextField
               fullWidth
@@ -124,7 +144,6 @@ const LoginForm = () => {
               onChange={handleChange}
               margin="normal"
               variant="outlined"
-              autoComplete="current-password"
               sx={{
                 backgroundColor: textFieldStyles.textFieldBg,
                 borderRadius: '8px',
@@ -144,12 +163,11 @@ const LoginForm = () => {
             transition={{ duration: 0.2 }}
           >
             <Button
-              variant="contained"
-              color="primary"
               type="submit"
               fullWidth
+              variant="contained"
               sx={{
-                mt: 2,
+                mt: 3,
                 py: 1.2,
                 fontWeight: 'bold',
                 backgroundColor: textFieldStyles.buttonBg,
@@ -167,21 +185,21 @@ const LoginForm = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.4 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
         >
           <Typography
             variant="body2"
-            sx={{ mt: 2, color: textFieldStyles.labelColor }}
+            sx={{ mt: 3, color: textFieldStyles.labelColor }}
           >
             Don't have an account?{' '}
             <Link
               style={{
-                cursor: 'pointer',
-                color: '#FFD700',
+                textDecoration: 'none',
+                color: textFieldStyles.linkColor,
               }}
-              to="signup"
+              to="/signup"
             >
-              SignUp
+              Sign Up
             </Link>
           </Typography>
         </motion.div>
